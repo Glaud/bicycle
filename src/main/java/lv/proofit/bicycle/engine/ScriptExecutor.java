@@ -4,13 +4,14 @@ import com.google.common.base.CaseFormat;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
+import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lv.proofit.bicycle.engine.model.*;
 import org.codehaus.groovy.control.CompilerConfiguration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -19,8 +20,20 @@ import java.math.RoundingMode;
 public class ScriptExecutor {
 
     private static final String BASE_SCRIPT = "BaseScript.groovy";
-    private static final String SCRIPTS_PATH = "src/main/groovy";
     private static final String CALCULATE_METHOD = "calculate";
+    @Value("${groovy.scripts.path}")
+    private String scriptsPath;
+    private GroovyScriptEngine groovyScriptEngine;
+
+    @SneakyThrows
+    @PostConstruct
+    void postConstruct() {
+        CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
+        compilerConfiguration.setScriptBaseClass(BASE_SCRIPT);
+        groovyScriptEngine = new GroovyScriptEngine(scriptsPath);
+        groovyScriptEngine.setConfig(compilerConfiguration);
+    }
+
 
     // TO DO exception handling
     @SneakyThrows
@@ -38,11 +51,7 @@ public class ScriptExecutor {
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, (calculationType.name() + "_" + calculationRequest.getRisk()).toUpperCase()) + ".groovy";
     }
 
-    private Class<?> loadScript(String scriptName) throws IOException, ResourceException, ScriptException {
-        var compilerConfiguration = new CompilerConfiguration();
-        compilerConfiguration.setScriptBaseClass(BASE_SCRIPT);
-        var groovyScriptEngine = new GroovyScriptEngine(SCRIPTS_PATH);
-        groovyScriptEngine.setConfig(compilerConfiguration);
+    private Class<?> loadScript(String scriptName) throws ResourceException, ScriptException {
         return groovyScriptEngine.loadScriptByName(scriptName);
     }
 
