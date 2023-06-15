@@ -1,15 +1,14 @@
-package lv.proofit.bicycle.engine.model;
+package lv.proofit.bicycle.api.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import lv.proofit.bicycle.engine.model.CoverageType;
 
 import java.math.BigDecimal;
 import java.util.Set;
 
 @ToString
 @Getter
-@Builder
 public class BicyclePolicy {
 
     private String make;

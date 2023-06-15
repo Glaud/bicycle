@@ -1,4 +1,4 @@
-package lv.proofit.bicycle.engine.model;
+package lv.proofit.bicycle.api.model;
 
 import java.math.BigDecimal;
 import java.util.List;

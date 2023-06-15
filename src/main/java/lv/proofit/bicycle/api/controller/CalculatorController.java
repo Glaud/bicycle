@@ -1,9 +1,9 @@
-package lv.proofit.bicycle.controller;
+package lv.proofit.bicycle.api.controller;
 
 import lombok.RequiredArgsConstructor;
-import lv.proofit.bicycle.engine.Calculator;
-import lv.proofit.bicycle.engine.model.PremiumRequest;
-import lv.proofit.bicycle.engine.model.PremiumResponse;
+import lv.proofit.bicycle.engine.service.Calculator;
+import lv.proofit.bicycle.api.model.PremiumRequest;
+import lv.proofit.bicycle.api.model.PremiumResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

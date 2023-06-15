@@ -1,7 +1,9 @@
-package lv.proofit.bicycle.engine.model;
+package lv.proofit.bicycle.api.model;
 
 import lombok.Getter;
 import lombok.ToString;
+import lv.proofit.bicycle.engine.model.CoverageType;
+import lv.proofit.bicycle.engine.model.RiskResponse;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

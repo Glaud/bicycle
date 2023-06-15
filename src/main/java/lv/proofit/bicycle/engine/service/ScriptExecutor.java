@@ -1,4 +1,4 @@
-package lv.proofit.bicycle.engine;
+package lv.proofit.bicycle.engine.service;
 
 import com.google.common.base.CaseFormat;
 import groovy.util.GroovyScriptEngine;

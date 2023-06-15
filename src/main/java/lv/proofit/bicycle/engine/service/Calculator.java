@@ -1,7 +1,11 @@
-package lv.proofit.bicycle.engine;
+package lv.proofit.bicycle.engine.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.proofit.bicycle.api.model.BicyclePolicy;
+import lv.proofit.bicycle.api.model.PremiumObject;
+import lv.proofit.bicycle.api.model.PremiumRequest;
+import lv.proofit.bicycle.api.model.PremiumResponse;
 import lv.proofit.bicycle.engine.model.*;
 import org.springframework.stereotype.Service;
 
