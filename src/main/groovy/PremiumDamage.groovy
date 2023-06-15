@@ -1,15 +1,20 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class PremiumDamage extends BaseScript implements PremiumCalculator {
 
+    final Logger logger = LoggerFactory.getLogger("PremiumDamage");
+
     BigDecimal calculate(def calcRequest) {
-        println "Calculating PremiumDamage for ${calcRequest}"
+        logger.info "Calculating PremiumDamage for ${calcRequest}"
         def riskBasePremium = super.findRiskBasePremiumFactor(calcRequest.risk)
-        println "riskBasePremium=${riskBasePremium}"
+        logger.info "riskBasePremium=${riskBasePremium}"
         def sumInsuredFactor = super.findSumInsuredFactor(calcRequest)
-        println "sumInsuredFactor=${sumInsuredFactor}"
+        logger.info "sumInsuredFactor=${sumInsuredFactor}"
         def bicycleAgeFactor = super.findBicycleAgeFactor(calcRequest)
-        println "bicycleAgeFactor=${bicycleAgeFactor}"
+        logger.info "bicycleAgeFactor=${bicycleAgeFactor}"
         def premium = riskBasePremium * sumInsuredFactor * bicycleAgeFactor;
-        println "premium=${premium}"
+        logger.info "premium=${premium}"
         return premium
     }
 }

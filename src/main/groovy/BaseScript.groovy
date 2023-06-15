@@ -1,6 +1,11 @@
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 import java.time.Year
 
 class BaseScript extends Script {
+
+    final Logger logger = LoggerFactory.getLogger("BaseScript");
 
     @Override
     Object run() {
@@ -91,6 +96,7 @@ class BaseScript extends Script {
             def map = sumInsuredFactor[0];
             return calculateFactor(map, calcRequest.riskSumInsured)
         } else {
+            logger.warn "SumInsuredFactor not found - returning 0 instead"
             return 0
         }
     }
