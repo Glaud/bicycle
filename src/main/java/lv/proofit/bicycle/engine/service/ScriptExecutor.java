@@ -44,7 +44,7 @@ public class ScriptExecutor {
         var scriptInstance = scriptClass.getDeclaredConstructor().newInstance();
         var result = scriptClass.getDeclaredMethod(CALCULATE_METHOD, Object.class).invoke(scriptInstance, calculationRequest);
         log.info("Calculated {} is {}", calculationType, result);
-        return ((BigDecimal) result).setScale(2, RoundingMode.HALF_UP);
+        return ((BigDecimal) result).setScale(2, RoundingMode.CEILING);
     }
 
     private String createScriptName(CalculationRequest calculationRequest, CalculationType calculationType) {
