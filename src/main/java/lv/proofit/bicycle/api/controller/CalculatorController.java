@@ -1,5 +1,6 @@
 package lv.proofit.bicycle.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lv.proofit.bicycle.engine.service.Calculator;
 import lv.proofit.bicycle.api.model.PremiumRequest;
@@ -17,7 +18,7 @@ public class CalculatorController {
     private final Calculator calculator;
 
     @PostMapping
-    PremiumResponse calculate(@RequestBody PremiumRequest premiumRequest) {
+    PremiumResponse calculate(@RequestBody @Valid PremiumRequest premiumRequest) {
         return calculator.calculatePremiums(premiumRequest);
     }
 }
