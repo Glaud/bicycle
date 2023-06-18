@@ -20,10 +20,12 @@ public class Calculator {
     private final ScriptExecutor scriptExecutor;
 
     public PremiumResponse calculatePremiums(PremiumRequest premiumRequest) {
+        log.info("Processing request for {} bicycles", premiumRequest.bicycles().size());
         var bicyclesCount = premiumRequest.bicycles().size();
         var premiumObjects = premiumRequest.bicycles().stream().map(bicycle -> calculatePremiumsForBicycle(bicycle, bicyclesCount)).toList();
         var totalPremium = premiumObjects.stream().map(PremiumObject::getPremium)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        log.info("Premium request processed!");
         return new PremiumResponse(premiumObjects, totalPremium);
     }
 
@@ -37,7 +39,7 @@ public class Calculator {
             premiumObject.addPremium(premium);
             premiumObject.addRisk(new RiskResponse(calculationRequest.getRisk(), riskSumInsured, premium));
         });
-
+        log.info("Premium calculated -> {}", premiumObject);
         return premiumObject;
     }
 

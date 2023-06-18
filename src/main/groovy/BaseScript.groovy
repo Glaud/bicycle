@@ -71,7 +71,6 @@ class BaseScript extends Script {
                         }
             }
         }
-        println ageFactorMap
         return !ageFactorMap ? null : ageFactorMap[0];
 
     }

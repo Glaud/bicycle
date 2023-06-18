@@ -1,6 +1,8 @@
 package lv.proofit.bicycle.api.handler;
 
 
+import lv.proofit.bicycle.engine.exceptions.GroovyScriptExecutionException;
+import lv.proofit.bicycle.engine.exceptions.GroovyScriptNotDefinedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,20 @@ import static java.util.stream.Collectors.toMap;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(GroovyScriptNotDefinedException.class)
+    public ResponseEntity<Object> handleGroovyScriptNotDefinedException(GroovyScriptNotDefinedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(GroovyScriptExecutionException.class)
+    public ResponseEntity<Object> handleGroovyScriptExecutionException(GroovyScriptExecutionException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ex.getMessage());
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Map<String, String>>> handleValidationErrors(MethodArgumentNotValidException ex) {

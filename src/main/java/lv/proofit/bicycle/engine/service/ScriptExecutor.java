@@ -7,11 +7,14 @@ import groovy.util.ScriptException;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import lv.proofit.bicycle.engine.exceptions.GroovyScriptExecutionException;
+import lv.proofit.bicycle.engine.exceptions.GroovyScriptNotDefinedException;
 import lv.proofit.bicycle.engine.model.*;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -34,17 +37,25 @@ public class ScriptExecutor {
         groovyScriptEngine.setConfig(compilerConfiguration);
     }
 
-
-    // TO DO exception handling
-    @SneakyThrows
     public BigDecimal calculate(CalculationRequest calculationRequest, CalculationType calculationType) {
-        log.info("Start calculating {} for {}", calculationType, calculationRequest);
-        var scriptName = createScriptName(calculationRequest, calculationType);
-        var scriptClass = loadScript(scriptName);
-        var scriptInstance = scriptClass.getDeclaredConstructor().newInstance();
-        var result = scriptClass.getDeclaredMethod(CALCULATE_METHOD, Object.class).invoke(scriptInstance, calculationRequest);
-        log.info("Calculated {} is {}", calculationType, result);
-        return ((BigDecimal) result).setScale(2, RoundingMode.CEILING);
+            log.info("Start calculating {} for {}", calculationType, calculationRequest);
+            var scriptName = createScriptName(calculationRequest, calculationType);
+        try {
+            Class<?> scriptClass = null;
+            scriptClass = loadScript(scriptName);
+            var scriptInstance = scriptClass.getDeclaredConstructor().newInstance();
+            var result = scriptClass.getDeclaredMethod(CALCULATE_METHOD, Object.class).invoke(scriptInstance, calculationRequest);
+            log.info("Calculated {} is {}", calculationType, result);
+            return ((BigDecimal) result).setScale(2, RoundingMode.CEILING);
+        } catch (ResourceException e) {
+            var msg = String.format("Groovy script %s not defined", scriptName);
+            log.error(msg);
+            throw new GroovyScriptNotDefinedException(msg);
+        } catch (ScriptException | InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException e) {
+            log.error("Unexpected exception", e);
+            throw new GroovyScriptExecutionException(e.getMessage());
+        }
     }
 
     private String createScriptName(CalculationRequest calculationRequest, CalculationType calculationType) {
