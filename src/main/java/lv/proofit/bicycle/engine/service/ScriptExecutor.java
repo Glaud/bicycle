@@ -4,14 +4,11 @@ import com.google.common.base.CaseFormat;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
-import jakarta.annotation.PostConstruct;
-import lombok.SneakyThrows;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.proofit.bicycle.engine.exceptions.GroovyScriptExecutionException;
 import lv.proofit.bicycle.engine.exceptions.GroovyScriptNotDefinedException;
 import lv.proofit.bicycle.engine.model.*;
-import org.codehaus.groovy.control.CompilerConfiguration;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,22 +17,11 @@ import java.math.RoundingMode;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ScriptExecutor {
 
-    private static final String BASE_SCRIPT = "BaseScript.groovy";
     private static final String CALCULATE_METHOD = "calculate";
-    @Value("${groovy.scripts.path}")
-    private String scriptsPath;
-    private GroovyScriptEngine groovyScriptEngine;
-
-    @SneakyThrows
-    @PostConstruct
-    void postConstruct() {
-        CompilerConfiguration compilerConfiguration = new CompilerConfiguration();
-        compilerConfiguration.setScriptBaseClass(BASE_SCRIPT);
-        groovyScriptEngine = new GroovyScriptEngine(scriptsPath);
-        groovyScriptEngine.setConfig(compilerConfiguration);
-    }
+    private final GroovyScriptEngine groovyScriptEngine;
 
     public BigDecimal calculate(CalculationRequest calculationRequest, CalculationType calculationType) {
             log.info("Start calculating {} for {}", calculationType, calculationRequest);
