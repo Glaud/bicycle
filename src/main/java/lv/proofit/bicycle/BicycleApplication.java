@@ -10,4 +10,5 @@ public class BicycleApplication {
 		SpringApplication.run(BicycleApplication.class, args);
 	}
 
+
 }
